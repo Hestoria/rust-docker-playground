@@ -1,0 +1,19 @@
+version: "3.7"
+
+services:
+  api:
+    image: rust-api-dev:latest
+    build:
+      context: ./api
+      dockerfile: dev-Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./api:/api
+      - cargo-cache:/usr/local/cargo/registry
+      - target-cache:/app/target
+    command: /bin/sh -c "cargo watch -c --poll -x run"
+
+volumes:
+  cargo-cache:
+  target-cache:

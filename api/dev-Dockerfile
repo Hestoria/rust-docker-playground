@@ -1,0 +1,7 @@
+FROM rust:1.64.0
+
+WORKDIR /api
+
+RUN cargo install cargo-watch
+
+COPY . .
