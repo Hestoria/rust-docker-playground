@@ -1,26 +1,19 @@
-# select build image
-FROM rust:1.64.0  as build
+FROM rust:1.64.0 as build
 
-# create a new empty shell project
 RUN USER=root cargo new --bin api
 WORKDIR /api
 
-# copy over your manifests
 COPY ./Cargo.lock ./Cargo.lock
 COPY ./Cargo.toml ./Cargo.toml
 
-# this build step will cache your dependencies
 RUN cargo build --release
-RUN rm src/*.rs
+RUN rm src/\*.rs
 
-# copy your source tree
 COPY ./src ./src
 
-# build for release
-RUN rm ./target/release/deps/api*
+RUN rm ./target/release/deps/api\*
 RUN cargo build --release
 
-# our final base
 FROM gcr.io/distroless/cc-debian10
 
 COPY --from=build /api/target/release/api /usr/local/bin/api
